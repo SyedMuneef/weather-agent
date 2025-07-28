@@ -1,0 +1,4 @@
+chainlit>=2.6.2
+openai-agents>=0.2.2
+python-dotenv>=1.1.1
+requests>=2.32.4
