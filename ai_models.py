@@ -8,7 +8,7 @@ load_dotenv()
 
 # Defining Model provider
 provider = AsyncOpenAI(
-    api_key = os.getenv("GEMINI_API_KEY"),
+    api_key = os.environ.get("GEMINI_API_KEY"),
     base_url= "https://generativelanguage.googleapis.com/v1beta/openai/"
     
 )

@@ -21,7 +21,7 @@ def get_location_key(location: str):
    dont pass more than one argument or it will throw error
     """
    try:
-    res = rq.get(f"http://dataservice.accuweather.com/locations/v1/search?apikey={os.getenv("ACCU_WEATHER_API_KEY")}&q={location}&details=false")
+    res = rq.get(f"http://dataservice.accuweather.com/locations/v1/search?apikey={os.environ.get("ACCU_WEATHER_API_KEY")}&q={location}&details=false")
     data = res.json()
     return data[0]['Key'] 
    except:
@@ -38,7 +38,7 @@ def get_weather_data(location: int):
    dont pass more than one argument or it will throw error
    """
    try:
-    res = rq.get(f"http://dataservice.accuweather.com/currentconditions/v1/{location}?apikey={os.getenv("ACCU_WEATHER_API_KEY")}&details=true")
+    res = rq.get(f"http://dataservice.accuweather.com/currentconditions/v1/{location}?apikey={os.environ.get("ACCU_WEATHER_API_KEY")}&details=true")
     data = res.json()
     return data
    except:
