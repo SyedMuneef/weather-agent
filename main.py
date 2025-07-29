@@ -19,7 +19,7 @@ async def handle_message():
         result = await Runner.run(Weather_Agent, chat_history)
 
         # Send the full response
-        await cl.Message(content=result.response).send()
+        await cl.Message(content=result.final_output).send()
 
     except Exception as e:
         # Catch and log any issues
