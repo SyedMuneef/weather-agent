@@ -1,34 +1,27 @@
-# This is main file of the programming, here also defined the UI of the app
-
 from ai_agents import Weather_Agent
 from agents import Runner
 import chainlit as cl
-import time
-from openai.types.responses import ResponseTextDeltaEvent
 
-
-
-Weather_Agent = Weather_Agent # Intializing Weather_Agent
-
+# Initialize the weather agent
+Weather_Agent = Weather_Agent
 
 @cl.on_chat_start
-async def handle_chat_start(): # this function will handle all the actions/functionality when user opens the chat.
-    await cl.Message(content="Hello I Will provide you weather Information!!!").send() # show greeting message on ui when user opens chat
-
-
+async def handle_chat_start():
+    await cl.Message(content="Hello! I will provide you with weather information.").send()
 
 @cl.on_message
 async def handle_message():
+    # Convert the Chainlit chat context to OpenAI format
     chat_history = cl.chat_context.to_openai()
-    result = Runner.run_streamed(Weather_Agent, chat_history)
-    reply = cl.Message(content="")
-    async for event in result.stream_events():
-        if event.type == "raw_response_event" and isinstance(event.data, ResponseTextDeltaEvent):
-            await reply.stream_token(event.data.delta)
-            
-    await reply.send()
 
-     
-  
-   
+    try:
+        # Run without streaming to avoid validation error from Gemini
+        result = await Runner.run(Weather_Agent, chat_history)
 
+        # Send the full response
+        await cl.Message(content=result.response).send()
+
+    except Exception as e:
+        # Catch and log any issues
+        await cl.Message(content="⚠️ Something went wrong: " + str(e)).send()
+        print("Error during agent execution:", e)
